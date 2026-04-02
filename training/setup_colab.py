@@ -88,7 +88,7 @@ def detect_gpu() -> dict:
         return {"gpu_name": "None", "vram_gb": 0, "precision": "fp32", "batch_size": 1}
 
     gpu_name = torch.cuda.get_device_name(0)
-    vram_bytes = torch.cuda.get_device_properties(0).total_mem
+    vram_bytes = torch.cuda.get_device_properties(0).total_memory
     vram_gb = vram_bytes / (1024**3)
 
     # Recommend settings based on GPU
