@@ -18,7 +18,6 @@ from training.config import (
     ADAPTER_DIR,
     BATCH_SIZE,
     CHECKPOINT_DIR,
-    EVAL_STEPS,
     GRADIENT_ACCUMULATION_STEPS,
     LEARNING_RATE,
     LOGGING_DIR,
@@ -86,10 +85,8 @@ def get_training_args() -> SFTConfig:
         logging_steps=10,
         logging_dir=LOGGING_DIR,
         # Evaluation
-        eval_strategy="steps",
-        eval_steps=EVAL_STEPS,
-        load_best_model_at_end=True,
-        metric_for_best_model="eval_loss",
+        eval_strategy="epoch",
+        load_best_model_at_end=False,
         # Performance
         gradient_checkpointing=True,
         max_grad_norm=0.3,
@@ -97,7 +94,7 @@ def get_training_args() -> SFTConfig:
         # SFT-specific
         dataset_text_field="text",
         max_seq_length=MAX_SEQ_LENGTH,
-        packing=False,
+        packing=True,
     )
 
 

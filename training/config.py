@@ -57,7 +57,7 @@ LORA_TARGET_MODULES = [             # Attention layers to insert LoRA into
 # Training Hyperparameters
 # =============================================================================
 
-NUM_EPOCHS = 3
+NUM_EPOCHS = 1                      # Start with 1 epoch; increase later if quality is good
 BATCH_SIZE = 1                      # Per-device batch size (T4 needs 1 with 2048 seq len)
 GRADIENT_ACCUMULATION_STEPS = 16    # Effective batch = BATCH_SIZE * this = 16
 LEARNING_RATE = 2e-4
@@ -66,11 +66,11 @@ WARMUP_STEPS = 50
 LR_SCHEDULER = "cosine"
 
 # Checkpointing
-SAVE_STEPS = 100
+SAVE_STEPS = 200
 SAVE_TOTAL_LIMIT = 3
 
 # Evaluation
-EVAL_STEPS = 100
+EVAL_STEPS = 200
 
 # Precision (set ONE to True based on your GPU)
 USE_FP16 = True                     # For T4
