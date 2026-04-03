@@ -143,7 +143,7 @@ def run_training():
         args=training_args,
         train_dataset=dataset["train"],
         eval_dataset=dataset["validation"],
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
     )
 
     # ---- Step 7: Resume logic ----
