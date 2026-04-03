@@ -12,7 +12,8 @@ Usage (from Colab notebook):
 import os
 from pathlib import Path
 
-from trl import SFTConfig, SFTTrainer
+from transformers import TrainingArguments
+from trl import SFTTrainer
 
 from training.config import (
     ADAPTER_DIR,
@@ -63,13 +64,10 @@ def find_last_checkpoint() -> str | None:
     return checkpoint_path
 
 
-def get_training_args() -> SFTConfig:
-    """Create the SFTConfig with all hyperparameters from config."""
+def get_training_args() -> TrainingArguments:
+    """Create the TrainingArguments with all hyperparameters from config."""
 
-    return SFTConfig(
-        # SFT-specific
-        max_seq_length=MAX_SEQ_LENGTH,
-        dataset_text_field="text",
+    return TrainingArguments(
         # Output & Checkpointing (Google Drive)
         output_dir=CHECKPOINT_DIR,
         save_steps=SAVE_STEPS,
@@ -142,7 +140,9 @@ def run_training():
         args=training_args,
         train_dataset=dataset["train"],
         eval_dataset=dataset["validation"],
-        processing_class=tokenizer,
+        tokenizer=tokenizer,
+        dataset_text_field="text",
+        max_seq_length=MAX_SEQ_LENGTH,
         packing=False,
     )
 

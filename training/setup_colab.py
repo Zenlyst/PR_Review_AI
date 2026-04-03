@@ -26,7 +26,7 @@ def install_dependencies() -> None:
         "peft>=0.10.0",
         "bitsandbytes>=0.43.0",
         "accelerate>=0.30.0",
-        "trl>=0.8.0",
+        "trl>=0.8.0,<0.12.0",
     ]
 
     print("📦 Installing dependencies...")
