@@ -140,7 +140,7 @@ def run_training():
         args=training_args,
         train_dataset=dataset["train"],
         eval_dataset=dataset["validation"],
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         dataset_text_field="text",
         max_seq_length=MAX_SEQ_LENGTH,
         packing=False,
