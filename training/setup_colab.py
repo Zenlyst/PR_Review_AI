@@ -21,12 +21,12 @@ def install_dependencies() -> None:
     """Install required pip packages (silent mode)."""
 
     packages = [
-        "transformers>=4.40.0",
+        "transformers>=4.46.0,<4.48.0",
         "datasets>=2.19.0",
         "peft>=0.10.0",
         "bitsandbytes>=0.43.0",
         "accelerate>=0.30.0",
-        "trl>=0.8.0,<0.12.0",
+        "trl>=0.12.0,<1.0.0",
     ]
 
     print("📦 Installing dependencies...")
