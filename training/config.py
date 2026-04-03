@@ -58,8 +58,8 @@ LORA_TARGET_MODULES = [             # Attention layers to insert LoRA into
 # =============================================================================
 
 NUM_EPOCHS = 3
-BATCH_SIZE = 4                      # Per-device batch size
-GRADIENT_ACCUMULATION_STEPS = 4     # Effective batch = BATCH_SIZE * this
+BATCH_SIZE = 1                      # Per-device batch size (T4 needs 1 with 2048 seq len)
+GRADIENT_ACCUMULATION_STEPS = 16    # Effective batch = BATCH_SIZE * this = 16
 LEARNING_RATE = 2e-4
 WEIGHT_DECAY = 0.01
 WARMUP_STEPS = 50
