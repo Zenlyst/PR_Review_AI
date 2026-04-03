@@ -28,6 +28,7 @@ LANGUAGE_FILTER = "Python"          # Filter by file-level language
 QUALITY_THRESHOLD = 0.5             # Minimum quality_score (0.0 - 1.0)
 MIN_CODE_LINES = 5                  # Minimum lines in before/after code
 MAX_CODE_LINES = 200                # Maximum lines in before/after code
+TRAIN_SAMPLE_LIMIT = 10000          # Max training samples (None = use all). Keeps Colab under ~8h.
 
 
 # =============================================================================
@@ -59,7 +60,7 @@ LORA_TARGET_MODULES = [             # Attention layers to insert LoRA into
 
 NUM_EPOCHS = 1                      # Start with 1 epoch; increase later if quality is good
 BATCH_SIZE = 1                      # Per-device batch size (T4 needs 1 with 2048 seq len)
-GRADIENT_ACCUMULATION_STEPS = 16    # Effective batch = BATCH_SIZE * this = 16
+GRADIENT_ACCUMULATION_STEPS = 8     # Effective batch = BATCH_SIZE * this = 8
 LEARNING_RATE = 2e-4
 WEIGHT_DECAY = 0.01
 WARMUP_STEPS = 50

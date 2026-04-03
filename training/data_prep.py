@@ -21,6 +21,7 @@ from training.config import (
     MIN_CODE_LINES,
     PROMPT_TEMPLATE,
     QUALITY_THRESHOLD,
+    TRAIN_SAMPLE_LIMIT,
 )
 
 
@@ -66,6 +67,11 @@ def load_and_filter_dataset() -> DatasetDict:
             and MIN_CODE_LINES <= x["after_lines"] <= MAX_CODE_LINES
         )
     )
+
+    # --- Filter 4: Subsample training set to fit Colab time limits ---
+    if TRAIN_SAMPLE_LIMIT and len(dataset["train"]) > TRAIN_SAMPLE_LIMIT:
+        print(f"🎲 Subsampling train set: {len(dataset['train']):,} → {TRAIN_SAMPLE_LIMIT:,}")
+        dataset["train"] = dataset["train"].shuffle(seed=42).select(range(TRAIN_SAMPLE_LIMIT))
 
     # Save to Google Drive
     os.makedirs(CACHED_DATASET_DIR, exist_ok=True)
