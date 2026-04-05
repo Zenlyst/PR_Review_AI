@@ -45,7 +45,7 @@ class GitHubService:
         payload = {
             "iat": now - 60,  # issued at (60s clock skew buffer)
             "exp": now + (10 * 60),  # expires in 10 minutes
-            "iss": settings.github_app_id,
+            "iss": str(settings.github_app_id),
         }
         return jwt.encode(payload, settings.github_private_key, algorithm="RS256")
 
