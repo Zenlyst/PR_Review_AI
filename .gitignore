@@ -1,0 +1,13 @@
+# Secrets
+*.env
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+
+# Database
+*.db
+
+# IDE / tooling
+.claude/

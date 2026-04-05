@@ -1,0 +1,23 @@
+# FastAPI + server
+fastapi>=0.110
+uvicorn[standard]
+
+# Database (async)
+sqlalchemy[asyncio]>=2.0
+asyncpg          # PostgreSQL
+aiosqlite        # SQLite (Colab dev fallback)
+
+# GitHub API
+httpx
+PyJWT
+cryptography
+
+# Configuration
+pydantic-settings
+
+# Model inference (same as training/)
+torch
+transformers
+peft
+bitsandbytes
+accelerate
