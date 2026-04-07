@@ -128,6 +128,138 @@ def run_test_examples(model, tokenizer) -> None:
                 "    return dest"
             ),
         },
+        # ---- v2 expanded eval set (added 2026-04-07) ----
+        {
+            "name": "Hardcoded API key in source",
+            "file_path": "services/stripe_client.py",
+            "before_code": (
+                "import os\n"
+                "import stripe\n"
+                "\n"
+                "stripe.api_key = os.environ['STRIPE_API_KEY']\n"
+                "\n"
+                "def charge(amount, token):\n"
+                "    return stripe.Charge.create(amount=amount, source=token)"
+            ),
+            "after_code": (
+                "import stripe\n"
+                "\n"
+                "stripe.api_key = 'sk_live_EXAMPLEFAKEKEYDONOTUSE'  # hardcoded secret\n"
+                "\n"
+                "def charge(amount, token):\n"
+                "    return stripe.Charge.create(amount=amount, source=token)"
+            ),
+        },
+        {
+            "name": "Bare except swallows exceptions",
+            "file_path": "services/notifier.py",
+            "before_code": (
+                "def send_notification(user, message):\n"
+                "    try:\n"
+                "        client.send(user.email, message)\n"
+                "    except SMTPException as e:\n"
+                "        logger.error('failed to send: %s', e)\n"
+                "        raise"
+            ),
+            "after_code": (
+                "def send_notification(user, message):\n"
+                "    try:\n"
+                "        client.send(user.email, message)\n"
+                "    except:\n"
+                "        pass"
+            ),
+        },
+        {
+            "name": "Mutable default argument",
+            "file_path": "utils/cache.py",
+            "before_code": (
+                "def add_item(item, items=None):\n"
+                "    if items is None:\n"
+                "        items = []\n"
+                "    items.append(item)\n"
+                "    return items"
+            ),
+            "after_code": (
+                "def add_item(item, items=[]):\n"
+                "    items.append(item)\n"
+                "    return items"
+            ),
+        },
+        {
+            "name": "DB connection without context manager",
+            "file_path": "db/repo.py",
+            "before_code": (
+                "def fetch_orders(user_id):\n"
+                "    with psycopg2.connect(DSN) as conn:\n"
+                "        with conn.cursor() as cur:\n"
+                "            cur.execute('SELECT * FROM orders WHERE user_id = %s', (user_id,))\n"
+                "            return cur.fetchall()"
+            ),
+            "after_code": (
+                "def fetch_orders(user_id):\n"
+                "    conn = psycopg2.connect(DSN)\n"
+                "    cur = conn.cursor()\n"
+                "    cur.execute('SELECT * FROM orders WHERE user_id = %s', (user_id,))\n"
+                "    return cur.fetchall()"
+            ),
+        },
+        {
+            "name": "Implicit None dereference after Optional return",
+            "file_path": "services/user_lookup.py",
+            "before_code": (
+                "def get_display_name(user_id):\n"
+                "    user = db.find_user(user_id)\n"
+                "    if user is None:\n"
+                "        return 'unknown'\n"
+                "    return user.name.title()"
+            ),
+            "after_code": (
+                "def get_display_name(user_id):\n"
+                "    user = db.find_user(user_id)\n"
+                "    return user.name.title()"
+            ),
+        },
+        {
+            "name": "N+1 query pattern in loop",
+            "file_path": "services/order_report.py",
+            "before_code": (
+                "def order_totals(user_ids):\n"
+                "    rows = db.session.query(Order).filter(Order.user_id.in_(user_ids)).all()\n"
+                "    totals = {}\n"
+                "    for row in rows:\n"
+                "        totals[row.user_id] = totals.get(row.user_id, 0) + row.amount\n"
+                "    return totals"
+            ),
+            "after_code": (
+                "def order_totals(user_ids):\n"
+                "    totals = {}\n"
+                "    for uid in user_ids:\n"
+                "        rows = db.session.query(Order).filter(Order.user_id == uid).all()\n"
+                "        totals[uid] = sum(r.amount for r in rows)\n"
+                "    return totals"
+            ),
+        },
+        {
+            "name": "Negative example — clean refactor, no issues",
+            "file_path": "utils/math_utils.py",
+            "before_code": (
+                "def average(numbers):\n"
+                "    total = 0\n"
+                "    count = 0\n"
+                "    for n in numbers:\n"
+                "        total += n\n"
+                "        count += 1\n"
+                "    if count == 0:\n"
+                "        return 0\n"
+                "    return total / count"
+            ),
+            "after_code": (
+                "def average(numbers):\n"
+                "    if not numbers:\n"
+                "        return 0\n"
+                "    return sum(numbers) / len(numbers)"
+            ),
+        },
     ]
 
     print("=" * 60)
