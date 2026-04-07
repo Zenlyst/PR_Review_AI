@@ -139,7 +139,7 @@ def _print_dataset_stats(dataset: DatasetDict) -> None:
     train = dataset["train"]
     df = train.to_pandas()
 
-    print(f"\n📂 Comment type distribution:")
+    print("\n📂 Comment type distribution:")
     for ctype, count in df["comment_type"].value_counts().items():
         pct = count / len(df) * 100
         print(f"  {ctype:>20}: {count:>6,} ({pct:.1f}%)")

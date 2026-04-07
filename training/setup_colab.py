@@ -125,7 +125,7 @@ def detect_gpu() -> dict:
     current_precision = "bf16" if USE_BF16 else ("fp16" if USE_FP16 else "fp32")
     if current_precision != precision:
         print(f"\n   ⚠️  Your config uses {current_precision}, but {precision} is recommended for {gpu_name}.")
-        print(f"      Update USE_FP16/USE_BF16 in training/config.py if needed.")
+        print("      Update USE_FP16/USE_BF16 in training/config.py if needed.")
 
     if BATCH_SIZE != batch_size:
         print(f"   ⚠️  Your config uses batch_size={BATCH_SIZE}, recommended: {batch_size}")
