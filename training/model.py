@@ -55,7 +55,7 @@ def load_base_model(bnb_config: BitsAndBytesConfig | None = None):
         bnb_config = get_bnb_config()
 
     print(f"🧠 Loading base model: {MODEL_NAME}")
-    print(f"   Quantization: 4-bit NF4 with double quantization")
+    print("   Quantization: 4-bit NF4 with double quantization")
 
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
